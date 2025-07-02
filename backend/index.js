@@ -20,9 +20,13 @@ app.post("/ask", async (req, res) => {
   }
 
   try {
-    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${process.env.GEMINI_API_KEY}`;
+    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
+    const headers = {
+      "Content-Type": "application/json",
+      "X-goog-api-key": process.env.GEMINI_API_KEY
+    };
 
-    const payload = {
+    const body = {
       contents: [
         {
           parts: [
@@ -34,11 +38,12 @@ app.post("/ask", async (req, res) => {
 
     const geminiRes = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+      headers: headers,
+      body: JSON.stringify(body)
     });
 
     const data = await geminiRes.json();
+
     console.log("📥 Gemini Raw Response:\n", JSON.stringify(data, null, 2));
 
     let answer = "No answer found.";
