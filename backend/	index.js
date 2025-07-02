@@ -1,3 +1,6 @@
+import fs from 'fs';
+console.log('📂 Directory Listing at start:', fs.readdirSync('./'));
+
 const express = require("express");
 const fetch = require("node-fetch");
 const cors = require("cors");
