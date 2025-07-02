@@ -1,10 +1,11 @@
+import express from "express";
+import fetch from "node-fetch";
+import cors from "cors";
+import dotenv from "dotenv";
 import fs from 'fs';
-console.log('📂 Directory Listing at start:', fs.readdirSync('./'));
 
-const express = require("express");
-const fetch = require("node-fetch");
-const cors = require("cors");
-require("dotenv").config();
+dotenv.config();
+console.log('📂 Directory Listing at start:', fs.readdirSync('./'));
 
 const app = express();
 app.use(cors());
@@ -36,4 +37,4 @@ app.post("/ask", async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
