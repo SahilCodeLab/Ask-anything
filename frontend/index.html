@@ -21,13 +21,15 @@
       color: #4a90e2;
       text-align: center;
     }
-    textarea, input[type="file"] {
+    textarea {
       width: 100%;
       margin-top: 10px;
       padding: 10px;
       font-size: 1rem;
       border: 1px solid #ccc;
       border-radius: 5px;
+      resize: vertical;
+      min-height: 100px;
     }
     button {
       background: #4a90e2;
@@ -46,6 +48,7 @@
       min-height: 100px;
       border-radius: 5px;
       box-shadow: 0 0 4px rgba(0,0,0,0.1);
+      white-space: pre-wrap;
     }
   </style>
 </head>
@@ -60,9 +63,14 @@
   <script>
     async function askAI() {
       const question = document.getElementById('question').value.trim();
-      if (!question) return alert('Please enter a question');
+      const output = document.getElementById('output');
 
-      document.getElementById('output').textContent = 'Thinking...';
+      if (!question) {
+        alert('Please enter a question');
+        return;
+      }
+
+      output.textContent = '🤔 Thinking...';
 
       try {
         const response = await fetch('https://ask-anything-ees1.onrender.com/ask', {
@@ -72,9 +80,12 @@
         });
 
         const data = await response.json();
-        document.getElementById('output').textContent = data.answer || 'No answer found';
+        console.log("🟢 Response:", data);
+
+        output.textContent = data.answer || '⚠️ No answer found';
       } catch (err) {
-        document.getElementById('output').textContent = 'Error: ' + err.message;
+        output.textContent = '❌ Error: ' + err.message;
+        console.error('Error:', err);
       }
     }
   </script>
