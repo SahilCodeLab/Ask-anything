@@ -30,10 +30,19 @@ app.post("/ask", async (req, res) => {
     );
 
     const data = await response.json();
-    const answer = data?.candidates?.[0]?.content?.parts?.[0]?.text || "No answer found.";
+
+    // 👇 Log full Gemini response for debug
+    console.log("📥 Gemini Raw Response:\n", JSON.stringify(data, null, 2));
+
+    const answer =
+      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+      data?.candidates?.[0]?.content?.parts?.map(p => p.text).join("\n") ||
+      "No answer found.";
+
     res.json({ answer });
+
   } catch (error) {
-    console.error("Error:", error);
+    console.error("❌ Gemini Fetch Error:", error);
     res.status(500).json({ error: "Something went wrong." });
   }
 });
