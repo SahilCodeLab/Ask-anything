@@ -29,7 +29,14 @@ app.post("/ask", async (req, res) => {
       }
     );
 
+    
     const data = await response.json();
+console.log("📥 Gemini Raw Response:\n", JSON.stringify(data, null, 2));
+const answer = data?.candidates?.[0]?.content?.parts?.[0]?.text || "No answer found.";
+
+
+
+
 
     // 👇 Log full Gemini response for debug
     console.log("📥 Gemini Raw Response:\n", JSON.stringify(data, null, 2));
