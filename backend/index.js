@@ -32,8 +32,19 @@ app.post("/ask", async (req, res) => {
     
     const data = await response.json();
 console.log("📥 Gemini Raw Response:\n", JSON.stringify(data, null, 2));
-const answer = data?.candidates?.[0]?.content?.parts?.[0]?.text || "No answer found.";
 
+let answer = "No answer found.";
+
+try {
+  const parts = data?.candidates?.[0]?.content?.parts;
+  if (parts && parts.length > 0) {
+    answer = parts.map(p => p.text).join("\n").trim();
+  }
+} catch (e) {
+  console.error("❌ Error extracting answer:", e);
+}
+
+res.json({ answer });
 
 
 
