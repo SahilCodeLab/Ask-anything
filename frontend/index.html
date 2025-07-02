@@ -65,11 +65,12 @@
       document.getElementById('output').textContent = 'Thinking...';
 
       try {
-        const response = await fetch('https://ask-anything-ees1.onrender.com', {
+        const response = await fetch('https://ask-anything-ees1.onrender.com/ask', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ question })
         });
+
         const data = await response.json();
         document.getElementById('output').textContent = data.answer || 'No answer found';
       } catch (err) {
