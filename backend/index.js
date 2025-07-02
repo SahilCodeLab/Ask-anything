@@ -9,6 +9,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send("✅ Gemini AI backend is live!");
+});
+
 app.post("/ask", async (req, res) => {
   const { question } = req.body;
   if (!question) return res.status(400).json({ error: "Question is required." });
