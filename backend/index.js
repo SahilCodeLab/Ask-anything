@@ -20,29 +20,32 @@ app.post("/ask", async (req, res) => {
   }
 
   try {
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${process.env.GEMINI_API_KEY}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: question }] }]
-        })
-      }
-    );
+    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${process.env.GEMINI_API_KEY}`;
 
-    const data = await response.json();
+    const payload = {
+      contents: [
+        {
+          parts: [
+            { text: question }
+          ]
+        }
+      ]
+    };
+
+    const geminiRes = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await geminiRes.json();
     console.log("📥 Gemini Raw Response:\n", JSON.stringify(data, null, 2));
 
     let answer = "No answer found.";
+    const parts = data?.candidates?.[0]?.content?.parts;
 
-    try {
-      const parts = data?.candidates?.[0]?.content?.parts;
-      if (parts && parts.length > 0) {
-        answer = parts.map(p => p.text).join("\n").trim();
-      }
-    } catch (e) {
-      console.error("❌ Error extracting answer:", e);
+    if (parts && parts.length > 0) {
+      answer = parts.map(p => p.text).join("\n").trim();
     }
 
     res.json({ answer });
